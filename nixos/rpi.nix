@@ -17,7 +17,7 @@
 
   # Keyboard
   services.xserver.xkb.layout = "fr,us";
-  services.xserver.xkb.xkbOptions = "grp:win_space_toggle";
+  services.xserver.xkb.options = "grp:win_space_toggle";
 
   # Desktop
   services.xserver.enable = true;
