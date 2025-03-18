@@ -4,11 +4,6 @@
   hardware.enableRedistributableFirmware = true;
 
   # Early boot
-  boot.loader.raspberryPi.enable = true;
-  boot.loader.version = 3;
-  boot.loader.firmwareConfig = ''
-    core_freq=250
-  '';
   boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
 
   # Network
