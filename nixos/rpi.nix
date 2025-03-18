@@ -13,7 +13,7 @@
   networking.interfaces."wlan0".useDHCP = true;
 
   # Time
-  time.timezone = "Europe/Paris";
+  time.timeZone = "Europe/Paris";
 
   # Keyboard
   services.xserver.xkb.layout = "fr,us";
