@@ -31,7 +31,7 @@
     vim
     nano
     firefox
-    feet
+    foot
   ];
 
   # TODO: auto update flake.lock with reboot
