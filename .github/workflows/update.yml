@@ -21,3 +21,5 @@ jobs:
           commit-msg: "chore(flake): bump inputs"
           pr-title: "chore(flake): bump inputs"
       - run: "gh pr merge --auto --merge ${{ steps.update.outputs.pull-request-number }}"
+          env:
+            GH_TOKEN: ${{ github.token }}
