@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 {
+  # Used to build image/version
+  nixpkgs.buildPlatform.system = "x86_64-linux";
+  nixpkgs.hostPlatform.system = "aarch64-linux";
+
   # Allow licensed firmware to be update
   hardware.enableRedistributableFirmware = true;
 
@@ -7,7 +11,7 @@
   boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
 
   # Network
-  networking.hostName = "rpi";
+  networking.hostName = "rpi3";
   networking.wireless.enable = true;
   networking.wireless.interfaces = [ "wlan0" ];
   networking.interfaces."wlan0".useDHCP = true;
@@ -23,6 +27,7 @@
   services.xserver.enable = true;
   services.xserver.desktopManager.lxqt.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
+  services.displayManager.defaultSession = "lxqt";
 
   # Environment wide packages
   environment.systemPackages = with pkgs; [
@@ -34,18 +39,19 @@
     foot
   ];
 
-  # TODO: auto update flake.lock with reboot
+  # TODO: auto update flake.lock with reboot (build from action ?)
 
-  # TODO: wake-on-lan at 9:00 + auto shutdown at 18:00
-  # wake up TV with it and shut it down too
+  # TODO: wake up at 9:00 + auto shutdown at 18:00
+  # TODO: wake-on-lan TV
 
   # Configure users
   users.mutableUsers = false;
-  users.users.rpi = {
+  users.users.magnetis = {
+    description = "magnetis";
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" ]; # wheel = admin
     # password generated with `mkpasswd` command
-    hashedPassword = "$y$j9T$rg0syrPPtjaLILPTTplI3/$5uykqP9tXjAsvOocbfosUeN6j6dMrHRUtwudKd4QaA5";
+    # hashedPassword = "$y$j9T$rg0syrPPtjaLILPTTplI3/$5uykqP9tXjAsvOocbfosUeN6j6dMrHRUtwudKd4QaA5";
   };
 
   # Nix settings
