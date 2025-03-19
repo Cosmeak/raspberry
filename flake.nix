@@ -16,7 +16,7 @@
         # Raspberry Pi 3 hardware modules
         hardware.nixosModules.raspberry-pi-3
         # Configuration module for the raspberry
-        ./nixos/rpi3.nix
+        ./config/rpi3.nix
       ];
     };
   };

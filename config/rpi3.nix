@@ -45,7 +45,7 @@
   # TODO: wake-on-lan TV
 
   # Configure users
-  users.mutableUsers = false;
+  users.mutableUsers = true;
   users.users.magnetis = {
     description = "magnetis";
     isNormalUser = true;
