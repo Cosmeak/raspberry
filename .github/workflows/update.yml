@@ -16,3 +16,8 @@ jobs:
         uses: cachix/install-nix-action@v31
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@v24
+        id: update
+        with:
+          commit-msg: "chore(flake): bump inputs"
+          pr-title: "chore(flake): bump inputs"
+      - run: "gh pr merge --auto --merge ${{ steps.update.outputs.pull-request-number }}"
