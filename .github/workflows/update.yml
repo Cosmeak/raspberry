@@ -20,6 +20,6 @@ jobs:
         with:
           commit-msg: "chore(flake): bump inputs"
           pr-title: "chore(flake): bump inputs"
-      - run: "gh pr merge --auto --reabse --delete-branch ${{ steps.update.outputs.pull-request-number }}"
+      - run: "gh pr merge --auto --rebase --delete-branch ${{ steps.update.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ github.token }}
