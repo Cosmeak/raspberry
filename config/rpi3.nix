@@ -1,8 +1,6 @@
 { config, pkgs, inputs, lib, ... }:
 {
   imports = [
-    # SD card image fro aarch64 architecture
-    "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
     # Raspberry Pi 3 hardware modules
     inputs.hardware.nixosModules.raspberry-pi-3
   ];
@@ -37,9 +35,9 @@
 
   # Desktop
   services.xserver.enable = true;
-  services.xserver.desktopManager.lxqt.enable = true;
+  services.xserver.windowManager.dwm.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
-  services.displayManager.defaultSession = "lxqt";
+  # services.displayManager.defaultSession = "lxqt";
 
   # Environment wide packages
   environment.systemPackages = with pkgs; [
@@ -47,9 +45,8 @@
     git
     vim
     nano
-    udisks
-    # firefox
-    # foot
+    st
+    surf
   ];
 
   # TODO: auto update flake.lock with reboot (build from action ?)
@@ -63,16 +60,11 @@
     description = "magnetis";
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" ]; # wheel = admin
-    # password generated with `mkpasswd` command
-    hashedPassword = "$y$j9T$rg0syrPPtjaLILPTTplI3/$5uykqP9tXjAsvOocbfosUeN6j6dMrHRUtwudKd4QaA5";
   };
 
   # Nix settings
   nix.settings.experimental-features = "nix-command flakes";
   nix.settings.trusted-users = [ "root" "@wheel" ];
-
-  # Enable unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # Perform garbage collection weekly to maintain low disk usage
   nix.gc.automatic = true;
