@@ -1,5 +1,12 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 {
+  imports = [
+    # SD card image fro aarch64 architecture
+    "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+    # Raspberry Pi 3 hardware modules
+    inputs.hardware.nixosModules.raspberry-pi-3
+  ];
+
   # Used to build image/version
   nixpkgs.buildPlatform.system = "x86_64-linux";
   nixpkgs.hostPlatform.system = "aarch64-linux";
@@ -10,7 +17,7 @@
   # Early boot
   boot.initrd.kernelModules = [ "vc4" "bcm2835_dma" "i2c_bcm2835" ];
 
-  # Network
+  # Network 
   networking.hostName = "rpi3";
   networking.wireless.enable = true;
   networking.wireless.interfaces = [ "wlan0" ];
@@ -37,6 +44,7 @@
     nano
     firefox
     foot
+    udisks
   ];
 
   # TODO: auto update flake.lock with reboot (build from action ?)
@@ -59,16 +67,5 @@
   nix.settings.trusted-users = [ "root" "@wheel" ];
 
   # Garbage collection
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
-  nix.gc.options = "--delete-older-than 1w";
-  nix.settings.auto-optimise-store = true;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.11";
+  mgt.system.garbageCollector.enable = true;
 }

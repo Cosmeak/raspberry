@@ -6,18 +6,40 @@
     hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = { self, nixpkgs, hardware, ... }@inputs: {
+  outputs = { self, nixpkgs, hardware, ... }@inputs: 
+  let
+    forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+  in {
     # Raspberry configuration
     nixosConfigurations.rpi3 = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
-      modules = [
-        # SD card image fro aarch64 architecture
-        "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-        # Raspberry Pi 3 hardware modules
-        hardware.nixosModules.raspberry-pi-3
-        # Configuration module for the raspberry
-        ./config/rpi3.nix
-      ];
+      specialArgs = { inherit inputs; };
+      modules = [ ./config/rpi3.nix ./modules/nixos/system/garbage-collector ];
     };
+
+    # Windows Subsystem for Linux (WSL)
+    # nixosConfigurations.wsl = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux";
+    #   specialArgs = { inherit inputs; };
+    #   modules = [ ./config/wsl.nix ];
+    # };
+
+    # Macos
+    # darwinConfigurations.macos = nixpkgs.lib.nixosSystem {
+    #   system = "aarch64-darwin";
+    #   specialArgs = { inherit inputs; };
+    #   modules = [ ./config/macos.nix ];
+    # };
+
+    devShells = forAllSystems(system:
+      let
+        pkgs = import nixpkgs { inherit system; };
+      in
+        {
+          default = pkgs.mkShell ({
+            buildInputs = with pkgs; [ just nixd ];
+          });
+        }
+    );
   };
 }
