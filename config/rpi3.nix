@@ -1,7 +1,7 @@
 { config, pkgs, inputs, lib, ... }:
 {
   imports = [
-    # Raspberry Pi 3 hardware modules
+    # Raspberry Pi 3 hardware module
     inputs.hardware.nixosModules.raspberry-pi-3
   ];
 
@@ -36,8 +36,11 @@
   # Desktop
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;
-  # services.displayManager.defaultSession = "lxqt";
+  services.xserver.displayManager.startx.enable = true;
+
+  # Auto login to magnetis user on startup
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "magnetis";
 
   # Environment wide packages
   environment.systemPackages = with pkgs; [
