@@ -54,11 +54,17 @@
     st
     surf
   ];
+  programs.firefox.enable = true;
 
-  # TODO: auto update flake.lock with reboot (build from action ?)
-
-  # TODO: wake up at 9:00 + auto shutdown at 18:00
-  # TODO: wake-on-lan TV
+  # Automatically launch surf with grafana on startup
+  systemd.user.services.magnetistv = {
+    name = "magnetisTV";
+    description = "Start grafana page in surf web browser after login";
+    wantedBy = [ "multi-user.target" ];
+    script = ''
+      surf https://magnetis.grafana.com/
+    '';
+  };
 
   # Configure users
   users.mutableUsers = true;
