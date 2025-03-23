@@ -10,7 +10,7 @@ nix-size:
   du -sh /nix/store
 
 build-config target:
-    sudo nixos-rebuild switch --flake .#rpi3 --target-host {{target}}
+    sudo nixos-rebuild switch --flake .#rpi3 --use-remote-sudo --target-host {{target}}
 
 build-image:
     sudo nix build .#packages.aarch64-linux.sdcard

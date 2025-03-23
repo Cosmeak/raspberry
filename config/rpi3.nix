@@ -5,9 +5,6 @@
     inputs.hardware.nixosModules.raspberry-pi-3
   ];
 
-  sdImage.compressImage = false;
-  fileExtension = lib.mkForce ".img*";
-
   # Disable some modules
   disabledModules = [ "profiles/base.nix" ];
 
@@ -22,13 +19,16 @@
 
   # Network
   networking.hostName = "rpi3";
-  networking.wireless.enable = true;
-  networking.wireless.interfaces = [ "wlan0" ];
-  networking.interfaces."wlan0".useDHCP = true;
-  networking.firewall.enable = false;
+  # networking.wireless.enable = true;
+  # networking.wireless.interfaces = [ "wlan0" ];
+  # networking.interfaces."wlan0".useDHCP = true;
+  # networking.firewall.enable = false;
 
   # Time
   time.timeZone = "Europe/Paris";
+
+  # Keyboard
+  services.xserver.xkb.layout = "fr";
 
   # Enable ssh
   services.openssh.enable = true;
@@ -36,11 +36,14 @@
   # Desktop
   services.xserver.enable = true;
   services.xserver.windowManager.dwm.enable = true;
-  services.xserver.displayManager.startx.enable = true;
+  # services.xserver.displayManager.startx.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.displayManager.defaultSession = "none+dwm";
 
   # Auto login to magnetis user on startup
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "magnetis";
+  services.getty.autologinUser = "magnetis";
 
   # Environment wide packages
   environment.systemPackages = with pkgs; [
@@ -63,6 +66,8 @@
     description = "magnetis";
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel" ]; # wheel = admin
+    # password generated with `mkpasswd` command
+    hashedPassword = "$y$j9T$rg0syrPPtjaLILPTTplI3/$5uykqP9tXjAsvOocbfosUeN6j6dMrHRUtwudKd4QaA5";
   };
 
   # Nix settings

@@ -16,7 +16,10 @@
     nixosConfigurations.rpi3 = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       specialArgs = { inherit inputs; };
-      modules = [ ./config/rpi3.nix ];
+      modules = [
+        "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+        ./config/rpi3.nix
+      ];
     };
 
     # SD Card image builder
@@ -24,7 +27,15 @@
       system = "aarch64-linux";
       format = "sd-aarch64";
       specialArgs = { inherit inputs; };
-      modules = [ ./config/rpi3.nix ];
+      modules = [
+        ./config/rpi3.nix
+
+        # Force some parameters for the image generation
+        ({ config, pkgs, lib, ... }:{
+          sdImage.compressImage = false;
+          fileExtension = lib.mkForce ".img*";
+        })
+      ];
     };
 
     # Development shells
